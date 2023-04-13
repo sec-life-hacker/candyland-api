@@ -6,7 +6,7 @@ require 'sequel'
 module Candyland
   # Models a Location
   class Location < Sequel::Model
-    many_to_many :events
+    on_to_many :events
     plugin :association_dependencies, documents: :destroy
 
     plugin :timestamps

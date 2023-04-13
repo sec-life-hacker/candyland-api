@@ -6,7 +6,7 @@ require 'sequel'
 module Candyland
   # MOdels an Event
   class Event < Sequel::Model
-    many_to_many :locations
+    many_to_one :locations
     plugin :association_dependencies, documents: :destroy
 
     plugin :timestamps
