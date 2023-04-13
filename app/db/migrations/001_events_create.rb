@@ -16,7 +16,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      unique [:location_id, :title]
+      unique %i[location_id title]
     end
   end
 end

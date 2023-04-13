@@ -10,7 +10,7 @@ module Candyland
   class Api < Roda
     plugin :halt
 
-    route do |routing| # rubocop:disable Metrics/BlockLength
+    route do |routing|
       response['Content-Type'] = 'application/json'
 
       routing.root do
@@ -23,15 +23,14 @@ module Candyland
           @location_route = "#{@api_root}/locations"
 
           routing.on String do |location_id|
-
             routing.on 'events' do
               @event_route = "#{@api_root}/locations/#{location_id}/events"
 
               # GET api/v1/locations/[location_id]/events/[event_id]
               routing.on String do |event_id|
-                event = Event.where(location_id: location_id, id: event_id).first
+                event = Event.where(location_id:, id: event_id).first
                 event ? event.to_json : raise('Event not found')
-                rescue StandardError => e
+              rescue StandardError => e
                 routing.halt 404, { message: e.message }.to_json
               end
 
@@ -39,7 +38,7 @@ module Candyland
               routing.get do
                 output = { data: Location[location_id].events }
                 JSON.pretty_generate(output)
-                rescue StandardError => e
+              rescue StandardError => e
                 routing.halt 404, { message: e.message }.to_json
               end
 
@@ -57,7 +56,7 @@ module Candyland
                   routing.halt 400, 'Could not save event'
                 end
 
-                rescue StandardError
+              rescue StandardError
                 routing.halt 500, { message: 'Database error' }.to_json
               end
             end
@@ -73,7 +72,7 @@ module Candyland
           routing.get do
             output = { data: Location.all }
             JSON.pretty_generate(output)
-            rescue StandardError
+          rescue StandardError
             routing.halt 404, { message: 'Could not find locations' }.to_json
           end
 
@@ -86,7 +85,7 @@ module Candyland
             response.status = 201
             response['Location'] = "#{@location_route}/#{new_location.id}"
             { message: 'Location saved', data: new_location }.to_json
-            rescue StandardError => e
+          rescue StandardError => e
             routing.halt 400, { message: e.message }.to_json
           end
         end
