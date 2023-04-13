@@ -21,3 +21,17 @@ gem 'rerun'
 
 # Quality
 gem 'rubocop'
+
+# Configuration
+gem 'figaro', '~>1.2'
+gem 'rake'
+
+# Database
+gem 'hirb'
+gem 'sequel', '~>5.55'
+group :development, :test do
+  gem 'sqlite3', '~>1.4'
+end
+
+# Performance
+gem 'rubocop-performance'

@@ -1,0 +1,7 @@
+---
+- name: "McDonald's"
+  description: "Just a regular McDonald's"
+  coordinate: '210.111, 128.112'
+- name: 'KFC'
+  description: 'Just a regular KFC'
+  coordinate: '210.101, 125.122'
