@@ -9,7 +9,7 @@ Sequel.migration do
 
       String :name, unique: true, null: false
       String :description, null: false
-      String :location, null: false
+      String :coordinate, null: false
 
       DateTime :created_at
       DateTime :updated_at

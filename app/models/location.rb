@@ -6,8 +6,8 @@ require 'sequel'
 module Candyland
   # Models a Location
   class Location < Sequel::Model
-    on_to_many :events
-    plugin :association_dependencies, documents: :destroy
+    one_to_many :events
+    plugin :association_dependencies, events: :destroy
 
     plugin :timestamps
 
@@ -16,12 +16,12 @@ module Candyland
       JSON(
         {
           data: {
-            type: 'project',
+            type: 'location',
             attributes: {
               id:,
               name:,
-              desctiption:,
-              coordinate:,
+              description:,
+              coordinate:
             }
           }
         }, options
