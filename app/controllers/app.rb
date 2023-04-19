@@ -48,7 +48,7 @@ module Candyland
                 new_data = JSON.parse(routing.body.read)
                 location = Location[location_id]
                 new_event = location.add_event(new_data)
-                raise 'Could not save event' unless new_event
+                raise 'Could not save event' unless new_event.save
 
                 response.status = 201
                 response['Location'] = "#{@event_route}/#{new_event.id}"
