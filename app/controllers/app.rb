@@ -10,6 +10,7 @@ module Candyland
   class Api < Roda
     plugin :halt
 
+    # rubocop:disable Metrics/BlockLength
     route do |routing|
       response['Content-Type'] = 'application/json'
 
@@ -47,14 +48,15 @@ module Candyland
                 new_data = JSON.parse(routing.body.read)
                 location = Location[location_id]
                 new_event = location.add_event(new_data)
+                raise 'Could not save event' unless new_event
 
-                if new_event
-                  response.status = 201
-                  response['Location'] = "#{@event_route}/#{new_event.id}"
-                  { message: 'Event saved', data: new_event }.to_json
-                else
-                  routing.halt 400, 'Could not save event'
-                end
+                response.status = 201
+                response['Location'] = "#{@event_route}/#{new_event.id}"
+                { message: 'Event saved', data: new_event }.to_json
+
+              rescue Sequel::MassAssignmentRestriction
+                Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+                routing.halt 400, { message: 'Illegal Attributes' }.to_json
 
               rescue StandardError
                 routing.halt 500, { message: 'Database error' }.to_json
@@ -65,6 +67,8 @@ module Candyland
             routing.get do
               location = Location[location_id]
               location ? location.to_json : raise('Location not found')
+            rescue StandardError => e
+              routing.halt 404, { message: e.message }.to_json
             end
           end
 
@@ -85,6 +89,11 @@ module Candyland
             response.status = 201
             response['Location'] = "#{@location_route}/#{new_location.id}"
             { message: 'Location saved', data: new_location }.to_json
+
+          rescue Sequel::MassAssignmentRestriction
+            Api.logger.warn "MASS-ASSIGNMENT: #{new_location.keys}"
+            routing.halt 400, { message: 'Illegal Attributes' }.to_json
+
           rescue StandardError => e
             routing.halt 400, { message: e.message }.to_json
           end

@@ -8,7 +8,19 @@ module Candyland
   class Event < Sequel::Model
     many_to_one :location
 
+    plugin :uuid, field: :id
     plugin :timestamps
+    plugin :whitelist_security
+    set_allowed_columns :title, :description, :time, :curator
+
+    def time
+      SecureDB.decrypt(time_secure)
+    end
+
+    def time=(plaintext)
+      self.time_secure = SecureDB.encrypt(plaintext)
+    end
+
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})
       JSON(

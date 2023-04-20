@@ -9,7 +9,18 @@ module Candyland
     one_to_many :events
     plugin :association_dependencies, events: :destroy
 
+    plugin :uuid, field: :id
     plugin :timestamps
+    plugin :whitelist_security
+    set_allowed_columns :name, :description, :coordinate
+
+    def coordinate
+      SecureDB.decrypt(coordinate_secure)
+    end
+
+    def coordinate=(plaintext)
+      self.coordinate_secure = SecureDB.encrypt(plaintext)
+    end
 
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})

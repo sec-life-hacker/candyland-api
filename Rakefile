@@ -7,12 +7,24 @@ task default: :spec
 
 desc 'Tests API specs only'
 task :api_spec do
-  sh 'ruby spec/api_spec.rb'
+  sh 'ruby spec/integration/api_spec.rb'
 end
 
 desc 'Test all the specs'
 Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'spec/*_spec.rb'
+  t.pattern = 'spec/**/*_spec.rb'
+  t.warning = false
+end
+
+desc 'Test unit specs'
+Rake::TestTask.new(:spec) do |t|
+  t.pattern = 'spec/unit/*_spec.rb'
+  t.warning = false
+end
+
+desc 'Test integration specs'
+Rake::TestTask.new(:spec) do |t|
+  t.pattern = 'spec/integration/*_spec.rb'
   t.warning = false
 end
 
@@ -74,5 +86,13 @@ namespace :db do
     db_filename = "app/db/store/#{Candyland::Api.environment}.db"
     FileUtils.rm(db_filename)
     puts "Deleted #{db_filename}"
+  end
+end
+
+namespace :newkey do
+  desc 'Create sample cryptographic key for database'
+  task :db do
+    require_app('lib')
+    puts "DB_KEY: #{SecureDB.generate_key}"
   end
 end

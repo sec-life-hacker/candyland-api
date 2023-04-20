@@ -5,12 +5,12 @@ require 'sequel'
 Sequel.migration do
   change do
     create_table(:events) do
-      primary_key :id
+      uuid :id, primary_key: true
       foreign_key :location_id, table: :locations
 
-      String :title, unique: true, null: false
-      String :description, null: false
-      String :time, null: false
+      String :title, unique: true, null: false, default: ''
+      String :description, null: false, default: ''
+      String :time_secure, null: false, default: ''
       String :curator, null: false
 
       DateTime :created_at
