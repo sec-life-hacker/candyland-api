@@ -8,12 +8,12 @@ describe 'Test Event handing' do
   before do
     wipe_database
 
-    DATA[:events].each do |event_data|
-      Candyland::Event.create(event_data)
+    DATA[:locations].each do |location_data|
+      Candyland::Location.create(location_data)
     end
   end
 
-  it 'HAPPY: should be able to get list of all documents' do
+  it 'HAPPY: should be able to get list of all events' do
     location = Candyland::Location.first
     DATA[:events].each do |event|
       location.add_event(event)
@@ -26,23 +26,23 @@ describe 'Test Event handing' do
     _(result['data'].count).must_equal 2
   end
 
-  it 'HAPPY: should be able to get details of a single document' do
+  it 'HAPPY: should be able to get details of a single event' do
     event_data = DATA[:events][1]
     location = Candyland::Location.first
     event = location.add_event(event_data)
 
-    get "/api/v1/locations/#{location.id}/events/#{id}"
+    get "/api/v1/locations/#{location.id}/events/#{event.id}"
     _(last_response.status).must_equal 200
 
     result = JSON.parse last_response.body
     _(result['data']['attributes']['id']).must_equal event.id
-    _(result['data']['attributes']['title']).must_equal event_data['name']
+    _(result['data']['attributes']['title']).must_equal event_data['title']
     _(result['data']['attributes']['description']).must_equal event_data['description']
     _(result['data']['attributes']['time']).must_equal event_data['time']
     _(result['data']['attributes']['curator']).must_equal event_data['curator']
   end
 
-  it 'SAD: should return error if unknown document requested' do
+  it 'SAD: should return error if unknown event requested' do
     get '/api/v1/events/foobar'
 
     _(last_response.status).must_equal 404
@@ -55,9 +55,9 @@ describe 'Test Event handing' do
       @req_header = { 'CONTENT_TYPE' => 'application/json' }
     end
 
-    it 'HAPPY: should be able to create new documents' do
-      post "api/v1/locations/#{@location_id}/events",
-           @event_data,
+    it 'HAPPY: should be able to create new events' do
+      post "api/v1/locations/#{@location.id}/events",
+           @event_data.to_json,
            @req_header
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
@@ -66,13 +66,13 @@ describe 'Test Event handing' do
       event = Candyland::Event.first
 
       _(created['id']).must_equal event.id
-      _(created['title']).must_equal existing_event['title']
-      _(created['description']).must_equal existing_event['description']
-      _(created['time']).must_equal existing_event['time']
-      _(created['curator']).must_equal existing_event['curator']
+      _(created['title']).must_equal @event_data['title']
+      _(created['description']).must_equal @event_data['description']
+      _(created['time']).must_equal @event_data['time']
+      _(created['curator']).must_equal @event_data['curator']
     end
 
-    it 'SECURITY: should not create documents with mass assignment' do
+    it 'SECURITY: should not create events with mass assignment' do
       bad_data = @event_data.clone
       bad_data['created_at'] = '1900-01-01'
       post "api/v1/locations/#{@location.id}/events",
