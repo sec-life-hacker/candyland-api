@@ -1,4 +1,4 @@
-# frozen_string_literal
+# frozen_string_literal: true
 
 require 'base64'
 require 'rbnacl'
@@ -9,12 +9,13 @@ class SecureDB
 
   # Generate key for Rake tasks
   def self.generate_key
-    key RbNaCl::Random.random_bytes(RbNaCl::SecretBox.key_bytes)
+    key = RbNaCl::Random.random_bytes(RbNaCl::SecretBox.key_bytes)
     Base64.strict_encode64 key
   end
 
   def self.setup(base_key)
     raise NoDbKeyError unless base_key
+
     @key = Base64.strict_decode64(base_key)
   end
 
@@ -31,7 +32,7 @@ class SecureDB
   def self.decrypt(ciphertext64)
     return nil unless ciphertext64
 
-    ciphertext = Base64.strict_decode64(ciphertext)
+    ciphertext = Base64.strict_decode64(ciphertext64)
     simple_box = RbNaCl::SimpleBox.from_secret_key(@key)
     simple_box.decrypt(ciphertext).force_encoding(Encoding::UTF_8)
   end
