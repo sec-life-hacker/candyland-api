@@ -7,8 +7,8 @@ module Candyland
   # Models a Location
   class Location < Sequel::Model
     one_to_many :events
-
     plugin :association_dependencies, events: :destroy
+
     plugin :uuid, field: :id
     plugin :timestamps
     plugin :whitelist_security

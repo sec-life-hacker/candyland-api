@@ -13,14 +13,6 @@ module Candyland
     plugin :whitelist_security
     set_allowed_columns :title, :description, :time, :curator
 
-    def description
-      SecureDB.decrypt(description_secure)
-    end
-
-    def description=(plaintext)
-      self.description_secure = SecureDB.encrypt(plaintext)
-    end
-
     def time
       SecureDB.decrypt(time_secure)
     end
