@@ -53,32 +53,27 @@ task console: :print_env do
 end
 
 namespace :db do
-  task :load do
-    require_app(nil) # load nothing by default
-    require 'sequel'
+  require_app(nil) # load nothing by default
+  require 'sequel'
 
-    Sequel.extension :migration
-    @app = Candyland::Api
-  end
-
-  task :load_models do
-    require_app('models')
-  end
+  Sequel.extension :migration
+  app = Candyland::Api
 
   desc 'Run migrations'
-  task migrate: %i[load print_env] do
+  task :migrate => :print_env do
     puts 'Migrating database to latest'
-    Sequel::Migrator.run(@app.DB, 'app/db/migrations')
+    Sequel::Migrator.run(app.DB, 'app/db/migrations')
   end
 
   desc 'Destroy data in database; maintain tables'
-  task delete: :load_models do
-    Candyland::Event.dataset.destroy
+  task :delete do
+    app.DB[:events].delete
+    app.DB[:locations].delete
   end
 
   desc 'Delete dev or test database file'
-  task drop: :load do
-    if @app.environment == :production
+  task :drop do
+    if app.environment == :production
       puts 'Cannot wipe production database!'
       return
     end
@@ -87,6 +82,26 @@ namespace :db do
     FileUtils.rm(db_filename)
     puts "Deleted #{db_filename}"
   end
+
+  task :load_models do
+    require_app(%w[lib models services])
+  end
+
+  task :reset_seeds => [:load_models] do
+    app.DB[:schema_seeds].delete if app.DB.tables.include?(:schema_seeds)
+    Candyland::Account.dataset.destroy
+  end
+
+  desc 'Seeds the development database'
+  task :seed => [:load_models] do
+    require 'sequel/extensions/seed'
+    Sequel::Seed.setup(:development)
+    Sequel.extension :seed
+    Sequel::Seeder.apply(app.DB, 'app/db/seeds')
+  end
+
+  desc 'Delete all data and reseed'
+  task reseed: [:reset_seeds, :seed]
 end
 
 namespace :newkey do
