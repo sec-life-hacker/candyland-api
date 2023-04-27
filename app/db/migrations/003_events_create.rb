@@ -6,6 +6,7 @@ Sequel.migration do
   change do
     create_table(:events) do
       uuid :id, primary_key: true
+      foreign_key :curator_id, table: :accounts
       foreign_key :location_id, table: :locations
 
       String :title, unique: true, null: false, default: ''
