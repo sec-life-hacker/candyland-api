@@ -11,7 +11,7 @@ module Candyland
     plugin :uuid, field: :id
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :description, :time, :curator
+    set_allowed_columns :title, :description, :time
 
     def time
       SecureDB.decrypt(time_secure)
@@ -31,8 +31,7 @@ module Candyland
               id:,
               title:,
               description:,
-              time:,
-              curator:
+              time:
             }
           },
           included: {

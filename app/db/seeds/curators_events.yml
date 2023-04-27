@@ -1,0 +1,8 @@
+---
+  - username: john.doe
+    proj_name:
+      - Realtek
+  - username: aaa11231
+    proj_name:
+      - Y4K
+      - Other Project

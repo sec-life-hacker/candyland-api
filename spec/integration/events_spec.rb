@@ -23,7 +23,7 @@ describe 'Test Event handing' do
     _(last_response.status).must_equal 200
 
     result = JSON.parse last_response.body
-    _(result['data'].count).must_equal 2
+    _(result['data'].count).must_equal 3
   end
 
   it 'HAPPY: should be able to get details of a single event' do
@@ -39,7 +39,6 @@ describe 'Test Event handing' do
     _(result['data']['attributes']['title']).must_equal event_data['title']
     _(result['data']['attributes']['description']).must_equal event_data['description']
     _(result['data']['attributes']['time']).must_equal event_data['time']
-    _(result['data']['attributes']['curator']).must_equal event_data['curator']
   end
 
   it 'SAD: should return error if unknown event requested' do
@@ -69,7 +68,6 @@ describe 'Test Event handing' do
       _(created['title']).must_equal @event_data['title']
       _(created['description']).must_equal @event_data['description']
       _(created['time']).must_equal @event_data['time']
-      _(created['curator']).must_equal @event_data['curator']
     end
 
     it 'SECURITY: should not create events with mass assignment' do
