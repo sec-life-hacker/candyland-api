@@ -1,0 +1,10 @@
+---
+- username: john.doe
+  email: john@gmail.com
+  password: passw0rdn!ce
+- username: cool.story
+  email: cs@gmail.com
+  password: supersupersecret
+- username: aaa11231
+  email: aaa11231@gmail.com
+  password: randompa$$w0rd
