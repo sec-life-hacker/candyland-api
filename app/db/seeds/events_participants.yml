@@ -1,8 +1,8 @@
 ---
-  - event_name: Realtek
+  - event_title: Realtek
     participant_email:
       - john@gmail.com
       - cs@gmail.com
-  - event_name: Y4K
+  - event_title: Y4K
     participant_email:
       - cs@gmail.com

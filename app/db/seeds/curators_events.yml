@@ -1,8 +1,8 @@
 ---
   - username: john.doe
-    proj_name:
+    event_title:
       - Realtek
   - username: aaa11231
-    proj_name:
+    event_title:
       - Y4K
       - Other Project
