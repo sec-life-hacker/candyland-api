@@ -4,11 +4,10 @@ require 'roda'
 require 'json'
 
 module Candyland
-  # Web controller for Credence API
+  # Web controller for Candyland API
   class Api < Roda
     plugin :halt
 
-    # rubocop:disable Metrics/BlockLength
     route do |routing|
       response['Content-Type'] = 'application/json'
 
@@ -76,6 +75,7 @@ module Candyland
               routing.post do
                 new_data = JSON.parse(routing.body.read)
                 location = Location[location_id]
+                # new_event = Candyland::CreateEventForLocation.call(location_id, new_data)
                 new_event = location.add_event(new_data)
                 raise 'Could not save event' unless new_event
 

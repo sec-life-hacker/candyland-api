@@ -11,8 +11,9 @@ module Candyland
     many_to_many :participations,
                  class: :'Candyland::Event',
                  join_table: :accounts_events,
-                 left_key: :curator_id, right_key: :event_id
+                 left_key: :participant_id, right_key: :event_id
 
+    plugin :uuid, field: :id
     plugin :association_dependencies,
            curated_events: :destroy,
            participations: :nullify

@@ -6,8 +6,8 @@ Sequel.migration do
   change do
     create_table(:events) do
       uuid :id, primary_key: true
-      foreign_key :curator_id, table: :accounts
-      foreign_key :location_id, table: :locations
+      foreign_key :curator_id, :accounts
+      foreign_key :location_id, :locations
 
       String :title, unique: true, null: false, default: ''
       String :description, null: false, default: ''
@@ -16,7 +16,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      unique %i[location_id title]
+      unique %i[title]
     end
   end
 end

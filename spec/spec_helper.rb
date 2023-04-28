@@ -17,4 +17,4 @@ end
 DATA = {} # rubocop:disable Style/MutableConstant
 DATA[:accounts] = YAML.safe_load File.read('app/db/seeds/accounts_seed.yml')
 DATA[:locations] = YAML.safe_load File.read('app/db/seeds/locations_seed.yml')
-DATA[:events] = YAML.safe_load File.read('app/db/seeds/events_seeds.yml')
+DATA[:events] = YAML.safe_load File.read('app/db/seeds/events_seed.yml')

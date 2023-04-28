@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Credence
+module Candyland
   # Add a collaborator to another owner's existing project
   class AddParticipantToEvent
     # Error for owner cannot be collaborator

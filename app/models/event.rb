@@ -6,7 +6,12 @@ require 'sequel'
 module Candyland
   # MOdels an Event
   class Event < Sequel::Model
-    many_to_one :location
+    many_to_one :curator, class: :'Candyland::Account'
+    many_to_one :location, class: :'Candyland::Location'
+    many_to_many :participants,
+                 class: :'Candyland::Account',
+                 join_table: :accounts_events,
+                 left_key: :event_id, right_key: :participant_id
 
     plugin :uuid, field: :id
     plugin :timestamps
@@ -33,9 +38,6 @@ module Candyland
               description:,
               time:
             }
-          },
-          included: {
-            location:
           }
         }, options
       )
