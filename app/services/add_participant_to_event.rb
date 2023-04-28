@@ -10,8 +10,10 @@ module Candyland
 
     def self.call(email:, event_id:)
       participant = Account.first(email:)
+
       event = Event.first(id: event_id)
-      raise(CuratorNotParticipantError) if event.curator.id == participant.id
+
+      raise(CuratorNotParticipantError) if event.curator_id == participant.id
 
       event.add_participant(participant)
     end
