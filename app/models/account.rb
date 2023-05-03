@@ -40,9 +40,10 @@ module Candyland
       JSON(
         {
           type: 'account',
-          id:,
-          username:,
-          email:
+          attributes: {
+            username:,
+            email:
+          }
         }, options
       )
     end
