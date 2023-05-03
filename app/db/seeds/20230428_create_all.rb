@@ -25,16 +25,25 @@ end
 
 def create_curated_events
   CURATOR_INFO.each do |curator|
-    account = Candyland::Account.first(username: curator['username'])
+    account = find_account_for_curator(curator['username'])
     curator['event_title'].each do |event_title|
-      event_data = EVENT_INFO.find { |event| event['title'] == event_title }
+      event_data = find_event_data_for_title(event_title)
       curator_id = account.id
-      Candyland::CreateEventForCurator.call(
-        curator_id:,
-        event_data:
-      )
+      create_event_for_curator(curator_id, event_data)
     end
   end
+end
+
+def find_account_for_curator(curator_username)
+  Candyland::Account.first(username: curator_username)
+end
+
+def find_event_data_for_title(event_title)
+  EVENT_INFO.find { |event| event['title'] == event_title }
+end
+
+def create_event_for_curator(curator_id, event_data)
+  Candyland::CreateEventForCurator.call(curator_id:, event_data:)
 end
 
 def add_participants
