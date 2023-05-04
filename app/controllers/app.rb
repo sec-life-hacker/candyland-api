@@ -9,8 +9,15 @@ module Candyland
     plugin :halt
     plugin :multi_route
 
+    def secure_request?(routing)
+      routing.scheme.casecmp(Api.config.SECURE_SCHEME).zero?
+    end
+
     route do |routing|
       response['Content-Type'] = 'application/json'
+
+      secure_request?(routing) ||
+        routing.halt(403, { message: 'TLS/SSL secured Connection Required' }.to_json)
 
       routing.root do
         { message: 'CandylandAPI up at /api/v1' }.to_json
