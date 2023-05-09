@@ -9,9 +9,9 @@ require 'yaml'
 require_relative 'test_load_all'
 
 def wipe_database
-  app.DB[:events].delete
-  app.DB[:locations].delete
-  app.DB[:accounts].delete
+  Candyland::Location.map(&:destroy)
+  Candyland::Event.map(&:destroy)
+  Candyland::Account.map(&:destroy)
 end
 
 DATA = {} # rubocop:disable Style/MutableConstant

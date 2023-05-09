@@ -14,6 +14,8 @@ module Candyland
                  left_key: :event_id, right_key: :participant_id
 
     plugin :uuid, field: :id
+    plugin :association_dependencies,
+           participants: :nullify
     plugin :timestamps
     plugin :whitelist_security
     set_allowed_columns :title, :description, :time
