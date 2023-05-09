@@ -40,6 +40,7 @@ module Candyland
       # Load crypto keys
       SecureDB.setup(ENV.delete('DB_KEY'))
     end
+    # rubocop:enable Lint/ConstantDefinitionInBlock
 
     configure :development, :test do
       require 'pry'
