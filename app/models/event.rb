@@ -32,14 +32,12 @@ module Candyland
     def to_json(options = {})
       JSON(
         {
-          data: {
-            type: 'event',
-            attributes: {
-              id:,
-              title:,
-              description:,
-              time:
-            }
+          type: 'event',
+          attributes: {
+            id:,
+            title:,
+            description:,
+            time:
           }
         }, options
       )
