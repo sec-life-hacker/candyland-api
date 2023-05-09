@@ -28,4 +28,13 @@ describe 'Test AddParticipantToEvent service' do
     _(@participant.events.count).must_equal 1
     _(@participant.events.first).must_equal @event
   end
+
+  it 'BAD: should not add curator as a participant' do
+    _(proc {
+      Candyland::AddParticipantToEvent.call(
+        email: @curator.email,
+        event_id: @event.id
+      )
+    }).must_raise Candyland::AddParticipantToEvent::CuratorNotParticipantError
+  end
 end

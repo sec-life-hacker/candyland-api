@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module Candyland
   # Add a collaborator to another owner's existing project
   class AddParticipantToEvent
@@ -13,7 +12,7 @@ module Candyland
 
       event = Event.first(id: event_id)
 
-      raise(CuratorNotParticipantError) if event.curator_id == participant.id
+      raise(CuratorNotParticipantError) if event.curator.id == participant.id
 
       event.add_participant(participant)
     end

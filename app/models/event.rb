@@ -6,7 +6,7 @@ require 'sequel'
 module Candyland
   # MOdels an Event
   class Event < Sequel::Model
-    many_to_one :curator, class: :'Candyland::Account'
+    many_to_one :curator, class: :'Candyland::Account', key_type: :uuid
     many_to_one :location, class: :'Candyland::Location'
     many_to_many :participants,
                  class: :'Candyland::Account',
