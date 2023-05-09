@@ -28,13 +28,4 @@ describe 'Test AddParticipantToEvent service' do
     _(@participant.events.count).must_equal 1
     _(@participant.events.first).must_equal @event
   end
-
-  #it 'BAD: should not add owner as a collaborator' do
-    #_(proc {
-      #Credence::AddCollaboratorToProject.call(
-        #email: @owner.email,
-        #project_id: @project.id
-      #)
-    #}).must_raise Credence::AddCollaboratorToProject::OwnerNotCollaboratorError
-  #end
 end
