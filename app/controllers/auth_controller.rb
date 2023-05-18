@@ -33,7 +33,6 @@ module Candyland
           auth_account = AuthenticateAccount.call(credentials)
           auth_account.to_json
         rescue AuthenticateAccount::UnauthorizedError => e
-          puts [e.class, e.message].join ': '
           routing.halt '403', { message: 'Credential Error' }.to_json
         end
       end

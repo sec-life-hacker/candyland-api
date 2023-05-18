@@ -16,18 +16,6 @@ Rake::TestTask.new(:spec) do |t|
   t.warning = false
 end
 
-desc 'Test unit specs'
-Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'spec/unit/*_spec.rb'
-  t.warning = false
-end
-
-desc 'Test integration specs'
-Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'spec/integration/*_spec.rb'
-  t.warning = false
-end
-
 desc 'Runs rubocop on tested code'
 task style: %i[spec audit] do
   sh 'rubocop .'
