@@ -49,7 +49,7 @@ module Candyland
           to: [{ 'email' => @registration[:email] }]
         }],
         from: { 'email' => from_email },
-        subject: 'Credent Registration Verification',
+        subject: 'Candyland Registration Verification',
         content: [
           { type: 'text/html',
             value: html_email }
