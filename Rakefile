@@ -16,18 +16,6 @@ Rake::TestTask.new(:spec) do |t|
   t.warning = false
 end
 
-desc 'Test unit specs'
-Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'spec/unit/*_spec.rb'
-  t.warning = false
-end
-
-desc 'Test integration specs'
-Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'spec/integration/*_spec.rb'
-  t.warning = false
-end
-
 desc 'Runs rubocop on tested code'
 task style: %i[spec audit] do
   sh 'rubocop .'
@@ -109,6 +97,12 @@ namespace :newkey do
   task :db do
     require_app('lib')
     puts "DB_KEY: #{SecureDB.generate_key}"
+  end
+
+  desc 'Create sample cryptographic key for tokens and messaging'
+  task :msg do
+    require_app('lib')
+    puts "MSG_KEY: #{AuthToken.generate_key}"
   end
 end
 
