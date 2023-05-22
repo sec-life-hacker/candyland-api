@@ -46,7 +46,7 @@ describe 'Test Location Handling' do
     req_header = { 'CONTENT_TYPE' => 'application/json' }
     post 'api/v1/locations', existing_location.to_json, req_header
     _(last_response.status).must_equal 201
-    _(last_response.header['Location'].size).must_be :>, 0
+    _(last_response.headers['Location'].size).must_be :>, 0
 
     created = JSON.parse(last_response.body)['data']['data']['attributes']
     location = Candyland::Location.first
