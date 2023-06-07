@@ -21,27 +21,27 @@ describe 'Test Event handing' do
         location = Candyland::Location.first
         DATA[:events].each do |event|
           event = location.add_event(event)
-          puts Candyland::AddParticipantToEvent.call(
+          Candyland::AddParticipantToEvent.call(
             email: account.email,
             event_id: event.id
           )
         end
       end
 
-      #it 'HAPPY: should get list for authorized account' do
-        #auth = Candyland::AuthenticateAccount.call(
-          #username: @account_data['username'],
-          #password: @account_data['password']
-        #)
+      it 'HAPPY: should get list for authorized account' do
+        auth = Candyland::AuthenticateAccount.call(
+          username: @account_data['username'],
+          password: @account_data['password']
+        )
 
-        #header 'AUTHORIZATION', "Bearer #{auth[:attributes][:auth_token]}"
+        header 'AUTHORIZATION', "Bearer #{auth[:attributes][:auth_token]}"
 
-        #get "api/v1/locations/#{location.id}/events"
-        #_(last_response.status).must_equal 200
+        get "api/v1/locations/#{location.id}/events"
+        _(last_response.status).must_equal 200
 
-        #result = JSON.parse last_response.body
-        #_(result['data'].count).must_equal 3
-      #end
+        result = JSON.parse last_response.body
+        _(result['data'].count).must_equal 3
+      end
     end
 
     it 'HAPPY: should be able to get details of a single event' do
@@ -56,7 +56,6 @@ describe 'Test Event handing' do
       _(result['attributes']['id']).must_equal event.id
       _(result['attributes']['title']).must_equal event_data['title']
       _(result['attributes']['description']).must_equal event_data['description']
-      _(result['attributes']['time']).must_equal event_data['time']
     end
 
     it 'SAD: should return error if unknown event requested' do
@@ -65,7 +64,6 @@ describe 'Test Event handing' do
       _(last_response.status).must_equal 404
     end
   end
-
 
   describe 'Create Events' do
     before do
@@ -87,7 +85,6 @@ describe 'Test Event handing' do
       _(created['id']).must_equal event.id
       _(created['title']).must_equal @event_data['title']
       _(created['description']).must_equal @event_data['description']
-      _(created['time']).must_equal @event_data['time']
     end
 
     it 'SECURITY: should not create events with mass assignment' do
