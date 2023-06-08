@@ -18,7 +18,7 @@ module Candyland
            participants: :nullify
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :description, :time
+    set_allowed_columns :title, :description, :time, :location_id
 
     def time
       SecureDB.decrypt(time_secure)

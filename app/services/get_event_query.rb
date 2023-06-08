@@ -23,7 +23,6 @@ module Candyland
       policy = EventPolicy.new(auth[:account], event, auth[:scope])
       raise ForbiddenError unless policy.can_view?
 
-      puts policy.can_view_detail?
       if policy.can_view_detail?
         event.full_details.merge(policies: policy.summary)
       else

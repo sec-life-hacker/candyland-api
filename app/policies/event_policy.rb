@@ -18,7 +18,7 @@ module Candyland
     end
 
     def can_edit?
-      can_write? account_curates_event?
+      can_write? && account_curates_event?
     end
 
     def can_delete?
