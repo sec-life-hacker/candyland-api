@@ -25,12 +25,17 @@ module Candyland
       can_write? && account_curates_event?
     end
 
+    def can_participate?
+      !account_curates_event?
+    end
+
     def summary
       {
         can_view: can_view?,
         can_view_detail: can_view_detail?,
         can_edit: can_edit?,
-        can_delete: can_delete?
+        can_delete: can_delete?,
+        can_participate: can_participate?
       }
     end
 

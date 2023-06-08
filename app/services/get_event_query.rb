@@ -26,7 +26,7 @@ module Candyland
       if policy.can_view_detail?
         event.full_details.merge(policies: policy.summary)
       else
-        event.to_h
+        event.to_h.merge(policies: policy.summary)
       end
     end
   end
