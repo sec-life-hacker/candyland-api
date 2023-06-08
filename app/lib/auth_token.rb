@@ -2,6 +2,7 @@
 
 require 'base64'
 require_relative 'securable'
+require_relative 'auth_scope'
 
 ## Token and Detokenize Authorization Information
 # Usage examples:
@@ -26,6 +27,7 @@ class AuthToken
     contents = AuthToken.detokenize(@token)
     @expiration = contents['exp']
     @payload = contents['payload']
+    @scope = contents['scope']
   end
 
   # Check if token is expired
@@ -43,11 +45,19 @@ class AuthToken
     expired? ? raise(ExpiredTokenError) : @payload
   end
 
+  def scope
+    expired? ? raise(ExpiredTokenError) : @scope
+  end
+
   def to_s = @token
 
   # Create a token from a Hash payload
-  def self.create(payload, expiration = ONE_WEEK)
-    contents = { 'payload' => payload, 'exp' => expires(expiration) }
+  def self.create(payload, scope = AuthScope.new, expiration = ONE_WEEK)
+    contents = {
+      'payload' => payload,
+      'scope' => scope,
+      'exp' => expires(expiration)
+    }
     AuthToken.new(tokenize(contents))
   end
 

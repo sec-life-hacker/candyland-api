@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Candyland
   # Add a collaborator to another owner's existing project
   class AddParticipantToEvent

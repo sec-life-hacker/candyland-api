@@ -18,7 +18,7 @@ module Candyland
            participants: :nullify
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :description, :time
+    set_allowed_columns :title, :description, :time, :location_id
 
     def time
       SecureDB.decrypt(time_secure)
@@ -27,20 +27,38 @@ module Candyland
     def time=(plaintext)
       self.time_secure = SecureDB.encrypt(plaintext)
     end
+    
+    def to_h
+      {
+        type: 'event',
+        attributes: {
+          id:,
+          title:,
+          description:,
+        }
+      }
+    end
+
+    def hidden_infos
+      {
+        time:
+      }
+    end
+
+    def full_details
+      to_h.merge(
+        hidden_infos:,
+        relationships: {
+          curator:,
+          location:,
+          participants:
+        }
+      )
+    end
 
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})
-      JSON(
-        {
-          type: 'event',
-          attributes: {
-            id:,
-            title:,
-            description:,
-            time:
-          }
-        }, options
-      )
+      JSON(to_h)
     end
     # rubocop:enable Metrics/MethodLength
   end

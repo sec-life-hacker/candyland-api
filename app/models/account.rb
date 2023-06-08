@@ -8,6 +8,7 @@ module Candyland
   # Models a registered account
   class Account < Sequel::Model
     one_to_many :curated_events, class: :'Candyland::Event', key: :curator_id
+    one_to_many :found_locations, class: :'Candyland::Location', key: :finder_id
     many_to_many :participations,
                  class: :'Candyland::Event',
                  join_table: :accounts_events,
@@ -25,6 +26,10 @@ module Candyland
 
     def events
       curated_events + participations
+    end
+
+    def locations
+      found_locations
     end
 
     def password=(new_password)

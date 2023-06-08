@@ -35,9 +35,10 @@ module Candyland
     end
 
     def html_email
+      puts @registration[:verification_url]
       <<~END_EMAIL
         <H1>Thank you for registering Candyland app</H1>
-        <p>Please <a href=\"#{@registration[:verification_url]}\">click here</a>
+        <p>Please <a href="#{@registration[:verification_url]}">click here</a>
         to validate your email.
         You will be asked to set a password to activate your account.</p>
       END_EMAIL
