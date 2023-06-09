@@ -26,6 +26,20 @@ module Candyland
         end
       end
 
+      # POST /api/v1/auth/sso
+      routing.post 'sso' do
+        auth_request = JSON.parse(request.body.read, symbolize_names: true)
+
+        auth_account = AuthorizeSso.new.call(auth_request[:access_token])
+        { data: auth_account }.to_json
+      rescue AuthorizeSso::NoEmailError
+        routing.halt 400
+      rescue StandardError => error
+        puts "FAILED to validate SSO account: #{error.inspect}"
+        puts error.backtrace
+        routing.halt 500
+      end
+
       routing.is 'authenticate' do
         # POST /api/v1/auth/authenticate
         routing.post do
