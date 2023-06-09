@@ -6,6 +6,9 @@ module Candyland
   # Web controller for Candyland API
   class Api < Roda
     route('locations') do |routing|
+      unless @auth_account
+        routing.halt 403, { message: 'Not authorized' }.to_json
+      end
       routing.on String do |location_id|
         @req_location = Location.first(id: location_id)
 
