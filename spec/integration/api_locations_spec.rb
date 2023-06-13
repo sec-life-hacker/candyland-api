@@ -43,6 +43,7 @@ describe 'Test Location Handling' do
   end
 
   it 'SAD: should return error if unknown locations requested' do
+    header 'AUTHORIZATION', "Bearer #{@auth[:attributes][:auth_token]}"
     get '/api/v1/locations/foobar'
 
     _(last_response.status).must_equal 404

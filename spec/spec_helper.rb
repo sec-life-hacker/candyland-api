@@ -9,8 +9,8 @@ require 'yaml'
 require_relative 'test_load_all'
 
 def wipe_database
-  Candyland::Location.map(&:destroy)
   Candyland::Event.map(&:destroy)
+  Candyland::Location.map(&:destroy)
   Candyland::Account.map(&:destroy)
 end
 
