@@ -61,6 +61,7 @@ describe 'Test Event handing' do
     end
 
     it 'SAD: should return error if unknown event requested' do
+      header 'AUTHORIZATION', "Bearer #{@auth[:attributes][:auth_token]}"
       get "/api/v1/locations/#{@location.id}/events/foobar"
 
       _(last_response.status).must_equal 404
