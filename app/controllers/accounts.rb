@@ -18,8 +18,8 @@ module Candyland
 
       # POST api/v1/accounts
       routing.post do
-        new_data = JSON.parse(routing.body.read)
-        new_account = Account.new(new_data)
+        account_data = SignedRequest.new(Api.config).parse(request.body.read)
+        new_account = Account.create(account_data)
         raise('Could not save account') unless new_account.save
 
         response.status = 201
