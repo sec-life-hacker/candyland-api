@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require './app/controllers/helpers.rb'
+
+include Candyland::SecureRequestHelpers
+
 Sequel.seed(:development) do
   def run
     puts 'Seeding accounts, locations, events'
@@ -69,9 +73,14 @@ def add_participants
   participate_info = PARTICIPATE_INFO
   participate_info.each do |participantion|
     event = Candyland::Event.first(title: participantion['event_title'])
+
+    auth_token = AuthToken.create(event.curator).to_s
+    auth = scoped_auth(auth_token)
     participantion['participant_email'].each do |email|
       Candyland::AddParticipantToEvent.call(
-        email:, event_id: event.id
+        auth: auth,
+        participant_email: email,
+        event:
       )
     end
   end

@@ -1,21 +1,41 @@
 # frozen_string_literal: true
 
 module Candyland
-  # Add a collaborator to another owner's existing project
+  # Add a participant to an existing event
   class AddParticipantToEvent
-    # Error for owner cannot be collaborator
+    class NotFoundError < StandardError
+      def message = 'Event not found'
+    end
+
+    # Error for curator cannot be participant
     class CuratorNotParticipantError < StandardError
       def message = 'Curator cannot be participant of event'
     end
 
-    def self.call(email:, event_id:)
-      participant = Account.first(email:)
+    # Error when request email doesn't exist in database
+    class ParticipantEmailNotFoundError < StandardError
+      def message = 'This email does not belong to any user'
+    end
 
-      event = Event.first(id: event_id)
+    # Error for not allowed to invite
+    class ForbiddenError < StandardError
+      def message = 'You are not allowed to invite participants'
+    end
 
-      raise(CuratorNotParticipantError) if event.curator.id == participant.id
+    def self.call(auth:, participant_email:, event:)
+      raise NotFoundError unless event
 
-      event.add_participant(participant)
+      invitee = Account.first(email: participant_email)
+      raise ParticipantEmailNotFoundError unless invitee
+
+      policy = ParticipateRequestPolicy.new(
+        event, auth[:account], invitee, auth[:scope]
+      )
+
+      raise ForbiddenError unless policy.can_invite?
+
+      event.add_participant(invitee)
+      invitee
     end
   end
 end

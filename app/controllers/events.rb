@@ -31,6 +31,37 @@ module Candyland
           end
         end
 
+        routing.on 'participate' do
+          # PUT api/v1/events/[event_id]/participate
+          routing.put do
+            ParticipantEvent.call(@auth, event: @req_event)
+            response.status = 200
+            response['Location'] = "#{@event_route}"
+          rescue ParticipantEvent::NotFoundError => e
+            routing.halt 404, { message: e.message }.to_json
+          rescue ParticipantEvent::CuratorNotParticipantError => e
+            routing.halt 400, { message: e.message }.to_json
+          rescue StandardError
+            routing.halt 500, { message: 'API server error' }.to_json
+          end
+        end
+
+        routing.on 'participants' do
+          # PUT api/v1/events/[event_id]/participants
+          routing.put do
+            req_data = JSON.parse(routing.body.read)
+            AddParticipantToEvent.call(@auth, req_data['email'], event: @req_event)
+            response.status = 200
+            response['Location'] = "#{@event_route}"
+          rescue AddParticipantToEvent::NotFoundError => e
+            routing.halt 404, { message: e.message }.to_json
+          rescue AddParticipantToEvent::CuratorNotParticipantError => e
+            routing.halt 400, { message: e.message }.to_json
+          rescue StandardError
+            routing.halt 500, { message: 'API server error' }.to_json
+          end
+        end
+
         # GET api/v1/events/[event_id]
         routing.get do
           event = GetEventQuery.call(auth: @auth, event: @req_event)
