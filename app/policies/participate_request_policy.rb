@@ -18,8 +18,10 @@ module Candyland
     end
 
     def can_invite?
-      puts @requestor.summary
-      puts @target.summary
+      print 'requestor'
+      print @requestor.summary
+      print 'target'
+      print @target.summary
       can_write? &&
         (@requestor.can_add_participants? && @target.can_participate?)
     end
