@@ -21,7 +21,7 @@ module Candyland
       raise(AlreadyRevealedError) if event.revealed?
 
       policy = EventPolicy.new(auth[:account], event, auth[:scope])
-      raise(ForbiddenError) unless policy.can_edit?
+      raise(ForbiddenError) unless policy.can_reveal?
       event.update(revealed: true)
     end
   end

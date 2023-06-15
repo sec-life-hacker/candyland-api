@@ -25,6 +25,10 @@ module Candyland
       can_write? && account_curates_event?
     end
 
+    def can_reveal?
+      can_write? && (account_curates_event? && !@event.revealed?)
+    end
+
     def can_remove_participants?
       can_write? && (account_curates_event? || account_owns_venue?)
     end
@@ -43,6 +47,7 @@ module Candyland
         can_view_detail: can_view_detail?,
         can_edit: can_edit?,
         can_delete: can_delete?,
+        can_reveal: can_reveal?,
         can_participate: can_participate?,
         can_add_participants: can_add_participants?,
         can_remove_participants: can_remove_participants?

@@ -25,9 +25,9 @@ module Candyland
             { message: 'Event Revealed', data: revealed_event }.to_json
           rescue RevealEvent::NotFoundError => e
             routing.halt 404, { message: e.message }.to_json
-          rescue RevealEvent::AlreadyRevealedError
+          rescue RevealEvent::AlreadyRevealedError => e
             routing.halt 400, { message: e.message }.to_json
-          rescue RevealEvent::ForbiddenError
+          rescue RevealEvent::ForbiddenError => e
             routing.halt 403, { message: e.message }.to_json
           end
         end
@@ -46,6 +46,8 @@ module Candyland
             { message: 'Your are now a participant' }.to_json
           rescue AddParticipantToEvent::NotFoundError => e
             routing.halt 404, { message: e.message }.to_json
+          rescue AddParticipantToEvent::ForbiddenError => e
+            routing.halt 403, { message: e.message }.to_json
           rescue AddParticipantToEvent::ParticipantEmailNotFoundError => e
             routing.halt 404, { message: e.message }.to_json
           rescue AddParticipantToEvent::CuratorNotParticipantError => e
@@ -74,6 +76,25 @@ module Candyland
             routing.halt 404, { message: e.message }.to_json
           rescue AddParticipantToEvent::CuratorNotParticipantError => e
             routing.halt 400, { message: e.message }.to_json
+          rescue StandardError => e
+            puts e.inspect
+            puts e.backtrace
+            routing.halt 500, { message: 'API server error' }.to_json
+          end
+
+          # DELETE api/v1/events/[event_id]/participants
+          routing.delete do
+            req_data = JSON.parse(routing.body.read)
+            participant = RemoveParticipant.call(
+              auth: @auth,
+              participant_email: req_data['participant_email'],
+              event_id: event_id
+            )
+
+            { message: "#{participant.username} removed from projet",
+              data: participant }.to_json
+          rescue RemoveParticipant::ForbiddenError => e
+            routing.halt 403, { message: e.message }.to_json
           rescue StandardError => e
             puts e.inspect
             puts e.backtrace

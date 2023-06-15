@@ -10,10 +10,11 @@ module Candyland
       @auth_scope = auth_scope
       @requestor = EventPolicy.new(requestor_account, event, auth_scope)
       @target = EventPolicy.new(target_account, event, auth_scope)
+      puts @requestor.summary.to_json
+      puts @target.summary.to_json
     end
 
     def can_invite?
-      puts can_self_invite?
       can_write? && (
         (@requestor.can_add_participants? && @target.can_participate?) ||
           can_self_invite?
@@ -22,7 +23,7 @@ module Candyland
 
     def can_remove?
       can_write? &&
-        (@requestor.can_remote_participants? && target_is_participant?)
+        (@requestor.can_remove_participants? && target_is_participant?)
     end
 
     private

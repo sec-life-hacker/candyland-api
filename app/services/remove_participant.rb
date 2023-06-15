@@ -10,18 +10,19 @@ module Candyland
       end
     end
 
-    def self.call(auth:, participant_id:, event_id:)
+    def self.call(auth:, participant_email:, event_id:)
       event = Event.first(id: event_id)
-      participant = Account.first(id: participant_id)
-      collaborator = Account.first(email: collab_email)
+      participant = Account.first(email: participant_email)
 
-      policy = CollaborationRequestPolicy.new(
-        project, auth[:account], collaborator, auth[:scope]
+      puts event_id
+      puts participant_email
+      policy = ParticipateRequestPolicy.new(
+        event, auth[:account], participant, auth[:scope]
       )
       raise ForbiddenError unless policy.can_remove?
 
-      project.remove_collaborator(collaborator)
-      collaborator
+      event.remove_participant(participant)
+      participant
     end
   end
 end
