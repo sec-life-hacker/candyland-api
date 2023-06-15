@@ -12,6 +12,7 @@ Sequel.migration do
       String :title, unique: true, null: false, default: ''
       String :description, null: false, default: ''
       String :time_secure, null: false, default: ''
+      Boolean :revealed, null: false, default: false
 
       DateTime :created_at
       DateTime :updated_at

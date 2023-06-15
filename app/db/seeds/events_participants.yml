@@ -1,8 +1,8 @@
 ---
   - event_title: Industry Symphony
     participant_email:
-      - john@gmail.com
-      - cs@gmail.com
+      - chuck@gmail.com
+      - bob@gmail.com
   - event_title: Y4K
     participant_email:
-      - cs@gmail.com
+      - chuck@gmail.com

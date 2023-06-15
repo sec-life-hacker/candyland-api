@@ -18,7 +18,7 @@ module Candyland
            participants: :nullify
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :description, :time, :location_id
+    set_allowed_columns :title, :description, :time, :location_id, :revealed
 
     def time
       SecureDB.decrypt(time_secure)
@@ -26,6 +26,10 @@ module Candyland
 
     def time=(plaintext)
       self.time_secure = SecureDB.encrypt(plaintext)
+    end
+
+    def revealed?
+      self.revealed
     end
     
     def to_h
@@ -35,13 +39,15 @@ module Candyland
           id:,
           title:,
           description:,
+          revealed:,
         }
       }
     end
 
     def hidden_infos
       {
-        time:
+        time:,
+        location:,
       }
     end
 
@@ -50,8 +56,7 @@ module Candyland
         hidden_infos:,
         relationships: {
           curator:,
-          location:,
-          participants:
+          participants:,
         }
       )
     end

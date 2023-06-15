@@ -1,10 +1,16 @@
 ---
-- username: john.doe
-  email: john@gmail.com
+- username: iamcurator
+  email: alice@gmail.com
   password: passw0rdn!ce
-- username: cool.story
-  email: cs@gmail.com
+
+- username: iamvenuehost
+  email: bob@gmail.com
   password: supersupersecret
-- username: aaa11231
-  email: aaa11231@gmail.com
+
+- username: iamparticipant
+  email: chuck@gmail.com
   password: randompa$$w0rd
+
+- username: iamnobody
+  email: eve@gmail.com
+  password: r@nd0mpa$ss0rd
