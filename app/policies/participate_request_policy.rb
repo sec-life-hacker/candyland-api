@@ -10,8 +10,6 @@ module Candyland
       @auth_scope = auth_scope
       @requestor = EventPolicy.new(requestor_account, event, auth_scope)
       @target = EventPolicy.new(target_account, event, auth_scope)
-      puts @requestor.summary.to_json
-      puts @target.summary.to_json
     end
 
     def can_invite?

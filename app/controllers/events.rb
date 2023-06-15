@@ -35,7 +35,6 @@ module Candyland
         routing.on 'participate' do
           # PUT api/v1/events/[event_id]/participate
           routing.put do
-            puts @auth_account[:email]
             AddParticipantToEvent.call(
               auth: @auth,
               participant_email: @auth_account[:email],

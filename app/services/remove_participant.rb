@@ -14,8 +14,6 @@ module Candyland
       event = Event.first(id: event_id)
       participant = Account.first(email: participant_email)
 
-      puts event_id
-      puts participant_email
       policy = ParticipateRequestPolicy.new(
         event, auth[:account], participant, auth[:scope]
       )
