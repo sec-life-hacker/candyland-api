@@ -22,6 +22,7 @@ module Candyland
             revealed_event = RevealEvent.call(auth: @auth, event: @req_event)
             response.status = 200
             response['Location'] = "#{@event_route}"
+            { message: 'Event Revealed', data: revealed_event }.to_json
           rescue RevealEvent::NotFoundError => e
             routing.halt 404, { message: e.message }.to_json
           rescue RevealEvent::AlreadyRevealedError
