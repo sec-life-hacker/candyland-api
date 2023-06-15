@@ -34,7 +34,7 @@ module Candyland
     end
 
     def can_participate?
-      !account_curates_event?
+      !(account_curates_event? || account_participates_event?)
     end
 
     def summary

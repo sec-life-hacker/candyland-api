@@ -34,14 +34,23 @@ module Candyland
         routing.on 'participate' do
           # PUT api/v1/events/[event_id]/participate
           routing.put do
-            ParticipantEvent.call(@auth, event: @req_event)
+            puts @auth_account[:email]
+            AddParticipantToEvent.call(
+              auth: @auth,
+              participant_email: @auth_account[:email],
+              event: @req_event
+            )
             response.status = 200
             response['Location'] = "#{@event_route}"
-          rescue ParticipantEvent::NotFoundError => e
+            { message: 'Your are now a participant' }.to_json
+          rescue AddParticipantToEvent::NotFoundError => e
             routing.halt 404, { message: e.message }.to_json
-          rescue ParticipantEvent::CuratorNotParticipantError => e
+          rescue AddParticipantToEvent::ParticipantEmailNotFoundError => e
+            routing.halt 404, { message: e.message }.to_json
+          rescue AddParticipantToEvent::CuratorNotParticipantError => e
             routing.halt 400, { message: e.message }.to_json
-          rescue StandardError
+          rescue StandardError => e
+            puts e.inspect
             routing.halt 500, { message: 'API server error' }.to_json
           end
         end
@@ -50,14 +59,23 @@ module Candyland
           # PUT api/v1/events/[event_id]/participants
           routing.put do
             req_data = JSON.parse(routing.body.read)
-            AddParticipantToEvent.call(@auth, req_data['email'], event: @req_event)
+            AddParticipantToEvent.call(
+              auth: @auth,
+              participant_email: req_data['participant_email'],
+              event: @req_event
+            )
             response.status = 200
             response['Location'] = "#{@event_route}"
+            { message: 'Participant Added' }.to_json
           rescue AddParticipantToEvent::NotFoundError => e
+            routing.halt 404, { message: e.message }.to_json
+          rescue AddParticipantToEvent::ParticipantEmailNotFoundError => e
             routing.halt 404, { message: e.message }.to_json
           rescue AddParticipantToEvent::CuratorNotParticipantError => e
             routing.halt 400, { message: e.message }.to_json
-          rescue StandardError
+          rescue StandardError => e
+            puts e.inspect
+            puts e.backtrace
             routing.halt 500, { message: 'API server error' }.to_json
           end
         end

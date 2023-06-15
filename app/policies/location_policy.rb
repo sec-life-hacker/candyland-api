@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Policy to determine if account can view an location
 module Candyland
+  # Policy to determine if account can view an location
   class LocationPolicy
     def initialize(account, location, auth_scope = nil)
       @account = account

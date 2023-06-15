@@ -12,18 +12,12 @@ module Candyland
       @target = EventPolicy.new(target_account, event, auth_scope)
     end
 
-    def can_self_invite?
-      can_write? &&
-        (@requestor.can_participate? && is_self?)
-    end
-
     def can_invite?
-      print 'requestor'
-      print @requestor.summary
-      print 'target'
-      print @target.summary
-      can_write? &&
-        (@requestor.can_add_participants? && @target.can_participate?)
+      puts can_self_invite?
+      can_write? && (
+        (@requestor.can_add_participants? && @target.can_participate?) ||
+          can_self_invite?
+      )
     end
 
     def can_remove?
@@ -41,8 +35,8 @@ module Candyland
       @event.participants.include?(@target_account)
     end
 
-    def is_self?
-      @requestor_account == @target_account
+    def can_self_invite?
+      @target.can_participate? && (@requestor_account == @target_account)
     end
   end
 end
