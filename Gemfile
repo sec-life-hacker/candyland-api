@@ -28,6 +28,8 @@ group :production do
 end
 
 # Testing
+gem 'simplecov'
+
 group :test do
   gem 'minitest'
   gem 'minitest-rg'
